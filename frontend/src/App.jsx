@@ -7,10 +7,11 @@ export default function App() {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState("");
 
+  const url = "http://localhost:4000";
+
   useEffect(() => {
     fetchTodos();
   }, []);
-  const url = "localhost:4000";
 
   const showError = (message) => {
     setError(message);
@@ -20,7 +21,6 @@ export default function App() {
     }, 4000);
   };
 
-  // Fetch todos
   const fetchTodos = async () => {
     try {
       const response = await fetch(`${url}/tasks`);
@@ -29,22 +29,22 @@ export default function App() {
         throw new Error("Failed to fetch todos");
       }
 
-      const todosData = await response.json();
-      setTodos(todosData.reverse());
+      const data = await response.json();
+
+      setTodos(data.reverse());
     } catch (err) {
       showError(err.message);
     }
   };
 
-  // Add todo
-  const addTodo = async ({ title, desc }) => {
+  const addTodo = async ({ text }) => {
     try {
       const response = await fetch(`${url}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, desc }),
+        body: JSON.stringify({ text }),
       });
 
       if (!response.ok) {
@@ -52,13 +52,13 @@ export default function App() {
       }
 
       const newTodo = await response.json();
+      console.log("Added new todo:", newTodo);
       setTodos((prev) => [newTodo, ...prev]);
     } catch (err) {
       showError(err.message);
     }
   };
 
-  // Delete todo
   const deleteTodo = async (id) => {
     try {
       const response = await fetch(`${url}/tasks/${id}`, {
@@ -75,8 +75,8 @@ export default function App() {
     }
   };
 
-  // Toggle completion
   const toggleTodo = async (id) => {
+    console.log("Toggling todo with id:", id);
     try {
       const todo = todos.find((t) => t.id === id);
 
@@ -100,7 +100,6 @@ export default function App() {
     }
   };
 
-  // Update todo
   const updateTodo = async (id, newData) => {
     try {
       const response = await fetch(`${url}/tasks/${id}`, {
@@ -108,7 +107,7 @@ export default function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newData),
+        body: JSON.stringify({ text: newData }),
       });
 
       if (!response.ok) {
@@ -116,7 +115,9 @@ export default function App() {
       }
 
       setTodos((prev) =>
-        prev.map((todo) => (todo.id === id ? { ...todo, ...newData } : todo)),
+        prev.map((todo) =>
+          todo.id === id ? { ...todo, text: newData } : todo,
+        ),
       );
     } catch (err) {
       showError(err.message);

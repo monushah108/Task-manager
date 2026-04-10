@@ -4,11 +4,11 @@ import { TrashIcon, PencilIcon, Check, X } from "lucide-react";
 const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const [editText, setEditText] = useState(todo.Text);
+  const [editText, setEditText] = useState(todo.text);
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditText(todo.Text);
+    setEditText(todo.text);
   };
 
   const handleSave = () => {
@@ -71,7 +71,7 @@ const TodoItem = ({ todo, deleteTodo, toggleTodo, updateTodo }) => {
                   todo.completed ? "line-through text-muted-foreground" : ""
                 }`}
               >
-                {todo.Text}
+                {todo.text}
               </h2>
 
               <p

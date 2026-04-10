@@ -64,8 +64,9 @@ const TodoList = ({ todos, deleteTodo, toggleTodo, updateTodo }) => {
       </div>
 
       <ul className="space-y-3">
-        {filteredTodos.map((todo) => (
+        {filteredTodos.map((todo, i) => (
           <TodoItem
+            key={i}
             todo={todo}
             deleteTodo={deleteTodo}
             toggleTodo={toggleTodo}
