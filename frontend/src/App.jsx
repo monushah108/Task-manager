@@ -1,121 +1,154 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [todos, setTodos] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+  const url = "localhost:4000";
+
+  const showError = (message) => {
+    setError(message);
+
+    setTimeout(() => {
+      setError("");
+    }, 4000);
+  };
+
+  // Fetch todos
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch(`${url}/todos`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch todos");
+      }
+
+      const todosData = await response.json();
+      setTodos(todosData.reverse());
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
+  // Add todo
+  const addTodo = async ({ title, desc }) => {
+    try {
+      const response = await fetch(`${url}/todos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, desc }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add todo");
+      }
+
+      const newTodo = await response.json();
+      setTodos((prev) => [newTodo, ...prev]);
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
+  // Delete todo
+  const deleteTodo = async (id) => {
+    try {
+      const response = await fetch(`${url}/todos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete todo");
+      }
+
+      setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
+  // Toggle completion
+  const toggleTodo = async (id) => {
+    try {
+      const todo = todos.find((t) => t.id === id);
+
+      const response = await fetch(`${url}/todos/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed: !todo.completed }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update todo");
+      }
+
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      );
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
+  // Update todo
+  const updateTodo = async (id, newData) => {
+    try {
+      const response = await fetch(`${url}/todos/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update todo");
+      }
+
+      setTodos((prev) =>
+        prev.map((todo) => (todo.id === id ? { ...todo, ...newData } : todo)),
+      );
+    } catch (err) {
+      showError(err.message);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+      <div className="w-full max-w-lg">
+        <header className="mb-8 flex justify-between items-center">
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
+            Todo App
+          </h1>
+        </header>
 
-      <div className="ticks"></div>
+        <TodoForm addTodo={addTodo} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <main className="mt-6">
+          <TodoList
+            todos={todos}
+            deleteTodo={deleteTodo}
+            toggleTodo={toggleTodo}
+            updateTodo={updateTodo}
+          />
+        </main>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {error && (
+          <div className="fixed bottom-6 right-6 bg-red-500 text-white px-4 py-2 rounded shadow-lg">
+            {error}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
-
-export default App
