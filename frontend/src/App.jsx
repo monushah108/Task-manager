@@ -23,7 +23,7 @@ export default function App() {
   // Fetch todos
   const fetchTodos = async () => {
     try {
-      const response = await fetch(`${url}/todos`);
+      const response = await fetch(`${url}/tasks`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch todos");
@@ -39,7 +39,7 @@ export default function App() {
   // Add todo
   const addTodo = async ({ title, desc }) => {
     try {
-      const response = await fetch(`${url}/todos`, {
+      const response = await fetch(`${url}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export default function App() {
   // Delete todo
   const deleteTodo = async (id) => {
     try {
-      const response = await fetch(`${url}/todos/${id}`, {
+      const response = await fetch(`${url}/tasks/${id}`, {
         method: "DELETE",
       });
 
@@ -80,8 +80,8 @@ export default function App() {
     try {
       const todo = todos.find((t) => t.id === id);
 
-      const response = await fetch(`${url}/todos/${id}`, {
-        method: "PUT",
+      const response = await fetch(`${url}/tasks/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -103,8 +103,8 @@ export default function App() {
   // Update todo
   const updateTodo = async (id, newData) => {
     try {
-      const response = await fetch(`${url}/todos/${id}`, {
-        method: "PUT",
+      const response = await fetch(`${url}/tasks/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
