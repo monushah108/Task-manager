@@ -5,6 +5,7 @@ import TodoForm from "./components/TodoForm";
 
 export default function App() {
   const [todos, setTodos] = useState([]);
+  const [isPending, setPending] = useState(false);
   const [error, setError] = useState("");
 
   const url = "http://localhost:4000";
@@ -22,6 +23,7 @@ export default function App() {
   };
 
   const fetchTodos = async () => {
+    setPending(true);
     try {
       const response = await fetch(`${url}/tasks`);
 
@@ -30,10 +32,11 @@ export default function App() {
       }
 
       const data = await response.json();
-
+      setPending(false);
       setTodos(data.reverse());
     } catch (err) {
       showError(err.message);
+      setPending(false);
     }
   };
 
@@ -136,12 +139,18 @@ export default function App() {
         <TodoForm addTodo={addTodo} />
 
         <main className="mt-6">
-          <TodoList
-            todos={todos}
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
-            updateTodo={updateTodo}
-          />
+          {isPending ? (
+            <div className="text-center p-8">
+              <p className="text-muted-foreground">Loading todos...</p>
+            </div>
+          ) : (
+            <TodoList
+              todos={todos}
+              deleteTodo={deleteTodo}
+              toggleTodo={toggleTodo}
+              updateTodo={updateTodo}
+            />
+          )}
         </main>
 
         {error && (

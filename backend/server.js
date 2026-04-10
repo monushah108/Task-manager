@@ -45,7 +45,6 @@ app.post("/tasks", async (req, res) => {
 
     const todo = await Todo.create({
       text,
-      completed: false,
     });
 
     return res.status(201).json({
