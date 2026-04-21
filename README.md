@@ -1,174 +1,36 @@
-# Todo App (MERN Stack)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A simple full-stack Todo application built using the **MERN stack**.
-Users can create, update, toggle completion, and delete tasks. The application demonstrates basic CRUD operations with a REST API and a responsive React frontend.
+## Getting Started
 
----
+First, run the development server:
 
-## Tech Stack
-
-**Frontend**
-
-- React
-- Tailwind CSS
-- Fetch API
-
-**Backend**
-
-- Node.js
-- Express.js
-
-**Database**
-
-- MongoDB
-- Mongoose
-
-**Other Tools**
-
-- CORS
-- Vite (React development environment)
-
----
-
-## Features
-
-- Add a new task
-- View all tasks
-- Toggle task completion
-- Edit task text
-- Delete tasks
-- Basic input validation
-- Error handling
-
----
-
-## Project Structure
-
-```
-todo-app
-│
-├── backend
-│   ├── models
-│   │   └── todoModel.js
-│   ├── db.js
-│   └── server.js
-│
-├── frontend
-│   ├── components
-│   │   ├── TodoForm.jsx
-│   │   └── TodoList.jsx
-│   └── App.jsx
-│
-└── README.md
-```
-
----
-
-## Setup Instructions
-
-### 1. Clone the repository
-
-```
-git clone <repository-url>
-cd todo-app
-```
-
----
-
-### 2. Install dependencies
-
-#### Backend
-
-```
-cd backend
-npm install
-```
-
-#### Frontend
-
-```
-cd frontend
-npm install
-```
-
----
-
-## Environment Setup
-
-Create a `.env` file inside the backend folder.
-
-Example:
-
-```
-MONGO_URI=your_mongodb_connection_string
-PORT=4000
-```
-
----
-
-## Run the Application
-
-### Start Backend
-
-```
-cd backend
-node server.js
-```
-
-Server will run at:
-
-```
-http://localhost:4000
-```
-
----
-
-### Start Frontend
-
-```
-cd frontend
+```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Frontend will run at:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```
-http://localhost:5173
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
----
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## API Endpoints
+## Learn More
 
-| Method | Endpoint   | Description   |
-| ------ | ---------- | ------------- |
-| GET    | /tasks     | Get all tasks |
-| POST   | /tasks     | Create a task |
-| PATCH  | /tasks/:id | Update a task |
-| DELETE | /tasks/:id | Delete a task |
+To learn more about Next.js, take a look at the following resources:
 
----
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Assumptions
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- Each task contains only:
-  - `text`
-  - `completed`
+## Deploy on Vercel
 
-- Tasks are stored in MongoDB.
-- The frontend assumes the backend runs on `localhost:4000`.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
----
-
-## Trade-offs
-
-- Authentication and user accounts were not implemented to keep the project simple.
-- State management libraries such as Redux were not used since the application is small.
-- Optimistic UI updates were avoided to keep the code straightforward.
-- Input validation is basic and handled mainly on the backend.
-
----
-
-## Author
-
-Built as a full-stack MERN practice project.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
